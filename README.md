@@ -1,3 +1,5 @@
+NOT IN USE IN CSSOS ENVIRONMENTS STILL WIP
+
 # AWS VPC Component for Pulumi
 
 _This is a project containing components for use with [Pulumi][pulumi], a tool for provisioning cloud infrastructure
