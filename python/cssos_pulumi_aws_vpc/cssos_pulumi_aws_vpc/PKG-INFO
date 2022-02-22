@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: cssos-pulumi-aws-vpc
+Version: 2.2.0
+Summary: A good-practice AWS VPC written in Python for Pulumi
+Home-page: https://github.com/curbsidesos/pulumi-aws-vpc-python
+Author: James Nugent
+Author-email: github@jen20.com
+License: MPLv2
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+UNKNOWN
+

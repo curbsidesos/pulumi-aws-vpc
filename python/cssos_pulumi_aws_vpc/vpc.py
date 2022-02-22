@@ -27,11 +27,11 @@ class VpcArgs:
                  description: str,
                  base_tags: Mapping[str, str],
                  base_cidr: str,
+                 vpc_number: str,
                  availability_zone_names: pulumi.Input[Sequence[pulumi.Input[str]]],
                  zone_name: pulumi.Input[str] = "",
                  create_s3_endpoint: bool = True,
-                 create_dynamodb_endpoint: bool = True,
-                 vpc_number: str):
+                 create_dynamodb_endpoint: bool = True):
         """
         Constructs a VpcArgs.
 

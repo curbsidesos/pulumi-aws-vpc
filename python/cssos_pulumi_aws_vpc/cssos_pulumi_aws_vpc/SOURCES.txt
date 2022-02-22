@@ -1,0 +1,7 @@
+setup.py
+cssos_pulumi_aws_vpc.egg-info/PKG-INFO
+cssos_pulumi_aws_vpc.egg-info/SOURCES.txt
+cssos_pulumi_aws_vpc.egg-info/dependency_links.txt
+cssos_pulumi_aws_vpc.egg-info/requires.txt
+cssos_pulumi_aws_vpc.egg-info/top_level.txt
+cssos_pulumi_aws_vpc.egg-info/zip-safe
