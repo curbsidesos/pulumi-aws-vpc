@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public License,
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain
 # one at http://mozilla.org/MPL/2.0/.
+#
+# Enhancements made by Aaron Bratt, CurbsideSOS
 
 """
 Contains utilities calculate appropriate CIDR address spaces from a base address
@@ -36,9 +38,13 @@ class SubnetDistributor:
     def __make_private_subnet(block: str) -> str:
         return SubnetDistributor.__cidr_subnet(block, 1, 0)
 
-    def __init__(self, base_cidr: str, az_count: int, private_subnet_count: int, public_subnets_count: int):
+    def __init__(self, base_cidr: str, az_count: int, private_subnet_count: int, public_subnet_count: int):
 
-        if private_subnets_count == 0 and public_subnets_count == 0:
+        #self.private_subnet_count =  private_subnet_count
+        #self.public_subnet_count = public_subnet_count
+
+        if (private_subnet_count == 0 and public_subnet_count == 0) or private_subnet_count >= 6 or public_subnet_count >= 6:
+            print(az_count)
             new_bits_per_az = int(math.log(SubnetDistributor.__next_power_of_2(az_count), 2))
             print(new_bits_per_az)
             az_bases = [SubnetDistributor.__cidr_subnet(base_cidr, new_bits_per_az, i) for i in range(az_count)]
@@ -46,4 +52,11 @@ class SubnetDistributor:
             self.private_subnets = list([SubnetDistributor.__make_private_subnet(block) for block in az_bases])
             self.public_subnets = list([SubnetDistributor.__make_public_subnet(block) for block in az_bases])
         else:
-            pass
+            #still wip going to go  another direction for now
+            az_count = public_subnet_count
+            new_bits_per_az = int(math.log(SubnetDistributor.__next_power_of_2(az_count), 2))
+            print(new_bits_per_az)
+            az_bases = [SubnetDistributor.__cidr_subnet(base_cidr, new_bits_per_az, i) for i in range(az_count)]
+            print(az_bases)
+            self.private_subnets = list([SubnetDistributor.__make_private_subnet(block) for block in az_bases])
+            self.public_subnets = list([SubnetDistributor.__make_public_subnet(block) for block in az_bases])

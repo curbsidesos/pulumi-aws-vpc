@@ -3,6 +3,8 @@
 # This Source Code Form is subject to the terms of the Mozilla Public License,
 # v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain
 # one at http://mozilla.org/MPL/2.0/.
+#
+# Enhancements made by Aaron Bratt, CurbsideSOS
 
 """
 Contains a Pulumi ComponentResource for creating a good-practice AWS VPC.
@@ -27,7 +29,9 @@ class VpcArgs:
                  description: str,
                  base_tags: Mapping[str, str],
                  base_cidr: str,
-                 vpc_number: str,
+                 infra_number: str,
+                 private_subnet_count: int,
+                 public_subnet_count: int,
                  availability_zone_names: pulumi.Input[Sequence[pulumi.Input[str]]],
                  zone_name: pulumi.Input[str] = "",
                  create_s3_endpoint: bool = True,
@@ -50,7 +54,10 @@ class VpcArgs:
         self.zone_name = zone_name
         self.create_s3_endpoint = create_s3_endpoint
         self.create_dynamodb_endpoint = create_dynamodb_endpoint
-        self.vpc_number = vpc_number
+        #cssos specific vars
+        self.infra_number = infra_number
+        self.private_subnet_count = private_subnet_count
+        self.public_subnet_count = public_subnet_count
 
 
 class Vpc(pulumi.ComponentResource):
@@ -84,25 +91,26 @@ class Vpc(pulumi.ComponentResource):
         self.base_tags = args.base_tags
 
         # Create VPC and Internet Gateway resources
-        self.vpc = ec2.Vpc(f"{name}-vpc-{args.vpc_number}",
+        self.vpc = ec2.Vpc(f"{name}-vpc-{args.infra_number}",
                            cidr_block=args.base_cidr,
                            enable_dns_hostnames=True,
                            enable_dns_support=True,
-                           tags={**args.base_tags, "Name": f"{args.description} VPC"},
+                           tags={**args.base_tags, "Name": f"{name}-vpc-{args.infra_number}"},
                            opts=pulumi.ResourceOptions(
                                parent=self,
                            ))
 
-        self.internet_gateway = ec2.InternetGateway(f"{name}-igw-{args.vpc_number}",
+        self.internet_gateway = ec2.InternetGateway(f"{name}-igw-{args.infra_number}",
                                                     vpc_id=self.vpc.id,
                                                     tags={**args.base_tags,
-                                                          "Name": f"{args.description} VPC Internet Gateway"},
+                                                          "Name": f"{name}-igw-{args.infra_number}"},
                                                     opts=pulumi.ResourceOptions(
                                                         parent=self.vpc,
                                                     ))
 
         # Calculate subnet CIDR blocks and create subnets
-        subnet_distributor = SubnetDistributor(args.base_cidr, len(args.availability_zone_names))
+        print(args.availability_zone_names)
+        subnet_distributor = SubnetDistributor(args.base_cidr, len(args.availability_zone_names), args.private_subnet_count, args.public_subnet_count)
 
         self.public_subnets = [ec2.Subnet(f"{name}-public-subnet-{i}",
                                           vpc_id=self.vpc.id,
@@ -126,10 +134,10 @@ class Vpc(pulumi.ComponentResource):
                                 for i, cidr in enumerate(subnet_distributor.private_subnets)]
 
         # Adopt the default route table for this VPC and adapt it for use with public subnets
-        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt-{args.vpc_number}",
+        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt-{args.infra_number}",
                                                         default_route_table_id=self.vpc.default_route_table_id,
                                                         tags={**args.base_tags,
-                                                              "Name": f"{args.description} Public Route Table"},
+                                                              "Name": f"{name}-public-rt-{args.infra_number}"},
                                                         opts=pulumi.ResourceOptions(
                                                             parent=self.vpc,
                                                         ))
