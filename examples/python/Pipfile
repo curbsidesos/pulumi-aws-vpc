@@ -6,8 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-jen20-pulumi-aws-vpc = {path = "./../../python"}
-pulumi_aws = ">=2.2.0,<3.0.0"
+cssos-pulumi-aws-vpc = {path = "./../../python"}
+pulumi_aws = ">=2.2.0,<5.0.0"
 
 [requires]
-python_version = "3.7"
+python_version = "3.9"

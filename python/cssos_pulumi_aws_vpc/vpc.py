@@ -30,7 +30,8 @@ class VpcArgs:
                  availability_zone_names: pulumi.Input[Sequence[pulumi.Input[str]]],
                  zone_name: pulumi.Input[str] = "",
                  create_s3_endpoint: bool = True,
-                 create_dynamodb_endpoint: bool = True):
+                 create_dynamodb_endpoint: bool = True,
+                 vpc_number: str):
         """
         Constructs a VpcArgs.
 
@@ -49,6 +50,7 @@ class VpcArgs:
         self.zone_name = zone_name
         self.create_s3_endpoint = create_s3_endpoint
         self.create_dynamodb_endpoint = create_dynamodb_endpoint
+        self.vpc_number = vpc_number
 
 
 class Vpc(pulumi.ComponentResource):
@@ -82,7 +84,7 @@ class Vpc(pulumi.ComponentResource):
         self.base_tags = args.base_tags
 
         # Create VPC and Internet Gateway resources
-        self.vpc = ec2.Vpc(f"{name}-vpc",
+        self.vpc = ec2.Vpc(f"{name}-vpc-{vpc_number}",
                            cidr_block=args.base_cidr,
                            enable_dns_hostnames=True,
                            enable_dns_support=True,
@@ -91,7 +93,7 @@ class Vpc(pulumi.ComponentResource):
                                parent=self,
                            ))
 
-        self.internet_gateway = ec2.InternetGateway(f"{name}-igw",
+        self.internet_gateway = ec2.InternetGateway(f"{name}-igw-{vpc_number}",
                                                     vpc_id=self.vpc.id,
                                                     tags={**args.base_tags,
                                                           "Name": f"{args.description} VPC Internet Gateway"},
@@ -124,7 +126,7 @@ class Vpc(pulumi.ComponentResource):
                                 for i, cidr in enumerate(subnet_distributor.private_subnets)]
 
         # Adopt the default route table for this VPC and adapt it for use with public subnets
-        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt",
+        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt-{vpc_number}",
                                                         default_route_table_id=self.vpc.default_route_table_id,
                                                         tags={**args.base_tags,
                                                               "Name": f"{args.description} Public Route Table"},

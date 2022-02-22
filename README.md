@@ -21,23 +21,16 @@ A [CHANGELOG][changelog] is maintained for this project.
 
 ## Installation
 
-### Node.js
-
-```shell
-$ npm install --save '@jen20/pulumi-aws-vpc'
-```
-
 ### Python
 
 ```shell
-$ pip3 install 'jen20_pulumi_aws_vpc'
+$ pip3 install 'cssos_pulumi_aws_vpc'
 ```
 
 ## Examples
 
 An example of the usage in a Pulumi program of each component is available:
 
-- [Node.js][example-node]
 - [Python][example-python]
 
 ## License

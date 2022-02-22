@@ -20,7 +20,7 @@ setup(
     name='jen20_pulumi_aws_vpc',
     version='2.2.0',
     packages=find_packages(exclude=['tests']),
-    url='https://github.com/jen20/pulumi-aws-vpc-python',
+    url='https://github.com/curbsidesos/pulumi-aws-vpc-python',
     license='MPLv2',
     author='James Nugent',
     author_email='github@jen20.com',

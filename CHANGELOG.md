@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project
 adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.2] - 2022-02-22
+### Adding CurbsideSOS specific Parameters 
+
 ## [2.2.1] - 2020-05-14
 
 ### Fixed
@@ -27,8 +30,8 @@ adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [2.0.0] - 2019-10-29
 
-*NOTE:* Version 2.0.0 introduces a major rearchitecture of the VPC component. There are numerous 
-breaking changes here, so if you are using version 1.0.0 of the component, it might be worthwhile 
+*NOTE:* Version 2.0.0 introduces a major rearchitecture of the VPC component. There are numerous
+breaking changes here, so if you are using version 1.0.0 of the component, it might be worthwhile
 to pin the dependency version to the 1.x range, rather than upgrading.
 
 ### Changed
@@ -53,7 +56,7 @@ to pin the dependency version to the 1.x range, rather than upgrading.
 ## [1.3.0] - 2018-09-15
 ### Changed
 
-- `zoneName` is now optional. If ommitted, a private hosted zone will not be created for the 
+- `zoneName` is now optional. If ommitted, a private hosted zone will not be created for the
   VPC [#7],
 - `tags` is now of type `aws.Tags` instead of a custom defined type - the definition is identical
   however. [#7]
