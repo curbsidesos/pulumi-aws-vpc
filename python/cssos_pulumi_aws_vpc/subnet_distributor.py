@@ -36,8 +36,14 @@ class SubnetDistributor:
     def __make_private_subnet(block: str) -> str:
         return SubnetDistributor.__cidr_subnet(block, 1, 0)
 
-    def __init__(self, base_cidr: str, az_count: int):
-        new_bits_per_az = int(math.log(SubnetDistributor.__next_power_of_2(az_count), 2))
-        az_bases = [SubnetDistributor.__cidr_subnet(base_cidr, new_bits_per_az, i) for i in range(az_count)]
-        self.private_subnets = list([SubnetDistributor.__make_private_subnet(block) for block in az_bases])
-        self.public_subnets = list([SubnetDistributor.__make_public_subnet(block) for block in az_bases])
+    def __init__(self, base_cidr: str, az_count: int, private_subnet_count: int, public_subnets_count: int):
+
+        if private_subnets_count == 0 and public_subnets_count == 0:
+            new_bits_per_az = int(math.log(SubnetDistributor.__next_power_of_2(az_count), 2))
+            print(new_bits_per_az)
+            az_bases = [SubnetDistributor.__cidr_subnet(base_cidr, new_bits_per_az, i) for i in range(az_count)]
+            print(az_bases)
+            self.private_subnets = list([SubnetDistributor.__make_private_subnet(block) for block in az_bases])
+            self.public_subnets = list([SubnetDistributor.__make_public_subnet(block) for block in az_bases])
+        else:
+            pass

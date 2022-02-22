@@ -84,7 +84,7 @@ class Vpc(pulumi.ComponentResource):
         self.base_tags = args.base_tags
 
         # Create VPC and Internet Gateway resources
-        self.vpc = ec2.Vpc(f"{name}-vpc-{vpc_number}",
+        self.vpc = ec2.Vpc(f"{name}-vpc-{args.vpc_number}",
                            cidr_block=args.base_cidr,
                            enable_dns_hostnames=True,
                            enable_dns_support=True,
@@ -93,7 +93,7 @@ class Vpc(pulumi.ComponentResource):
                                parent=self,
                            ))
 
-        self.internet_gateway = ec2.InternetGateway(f"{name}-igw-{vpc_number}",
+        self.internet_gateway = ec2.InternetGateway(f"{name}-igw-{args.vpc_number}",
                                                     vpc_id=self.vpc.id,
                                                     tags={**args.base_tags,
                                                           "Name": f"{args.description} VPC Internet Gateway"},
@@ -126,7 +126,7 @@ class Vpc(pulumi.ComponentResource):
                                 for i, cidr in enumerate(subnet_distributor.private_subnets)]
 
         # Adopt the default route table for this VPC and adapt it for use with public subnets
-        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt-{vpc_number}",
+        self.public_route_table = ec2.DefaultRouteTable(f"{name}-public-rt-{args.vpc_number}",
                                                         default_route_table_id=self.vpc.default_route_table_id,
                                                         tags={**args.base_tags,
                                                               "Name": f"{args.description} Public Route Table"},
